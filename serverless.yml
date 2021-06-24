@@ -79,7 +79,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: find
+          path: ingredient/find
           method: POST
     iamRoleStatements:
       - Effect: "Allow"

@@ -106,7 +106,7 @@ const createIngredient = async (event) => {
     const body = JSON.parse(event.body);
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
-      Item: ingredientInfo(body),
+      Item: marshall(ingredientInfo(body)),
     };
     const createResult = await db.send(new PutItemCommand(params));
 

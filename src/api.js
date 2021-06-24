@@ -1,4 +1,4 @@
-const db = require("./src/db");
+const db = require("./db");
 const {
   GetItemCommand,
   PutItemCommand,

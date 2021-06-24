@@ -23,7 +23,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: ingredient{ingredientId}
+          path: ingredient/{ingredientId}
           method: GET
     iamRoleStatements:
       - Effect: "Allow"
@@ -51,7 +51,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: ingredient{ingredientId}
+          path: ingredient/{ingredientId}
           method: PUT
     iamRoleStatements:
       - Effect: "Allow"
@@ -65,7 +65,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: ingredient{ingredientId}
+          path: ingredient/{ingredientId}
           method: DELETE
     iamRoleStatements:
       - Effect: "Allow"

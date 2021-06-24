@@ -7,12 +7,12 @@ const {
   UpdateItemCommand,
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const uuid = require("uuid");
+const uuidv4 = require("uuid/v4");
 
 const ingredientInfo = (ingredient) => {
   const timestamp = new Date().getTime();
   return {
-    id: uuid.v1(),
+    id: uuidv4(),
     title: ingredient.title,
     img: ingredient.img,
     fat: ingredient.fat,
@@ -108,6 +108,7 @@ const createIngredient = async (event) => {
       TableName: process.env.INGREDIENT_TABLE,
       Item: marshall(ingredientInfo(body)),
     };
+    console.log(params);
     const createResult = await db.send(new PutItemCommand(params));
 
     response.body = JSON.stringify({

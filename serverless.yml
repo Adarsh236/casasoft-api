@@ -17,7 +17,7 @@ plugins:
 
 functions:
   getIngredientById:
-    handler: api.getIngredientById
+    handler: src/api.getIngredientById
     name: get-ingredient-by-id
     memorySize: 128 # mb
     timeout: 5 # seconds
@@ -31,7 +31,7 @@ functions:
           - "dynamodb:GetItem"
         Resource: !GetAtt PostsTable.Arn
   createIngredient:
-    handler: api.createIngredient
+    handler: src/api.createIngredient
     name: create-ingredient
     memorySize: 128 # mb
     timeout: 5 # seconds
@@ -45,7 +45,7 @@ functions:
           - "dynamodb:PutItem"
         Resource: !GetAtt PostsTable.Arn
   updateIngredientById:
-    handler: api.updateIngredientById
+    handler: src/api.updateIngredientById
     name: update-ingredient-by-id
     memorySize: 128 # mb
     timeout: 5 # seconds
@@ -59,7 +59,7 @@ functions:
           - "dynamodb:UpdateItem"
         Resource: !GetAtt PostsTable.Arn
   deleteIngredientById:
-    handler: api.deleteIngredientById
+    handler: src/api.deleteIngredientById
     name: delete-ingredient-by-id
     memorySize: 128 # mb
     timeout: 5 # seconds
@@ -73,7 +73,7 @@ functions:
           - "dynamodb:DeleteItem"
         Resource: !GetAtt PostsTable.Arn
   findIngredients:
-    handler: api.findIngredients
+    handler: src/api.findIngredients
     name: find-ingredients
     memorySize: 128 # mb
     timeout: 5 # seconds

@@ -7,10 +7,10 @@ provider:
   region: us-east-2
   apiName: casasoft-api
   environment:
-    INGREDIENT_TABLE: ${self:custom.ingredientTableName}-${opt:stage, self:provider.stage}
+    INGREDIENT_TABLE: ${self:custom.ingredientTableName}
 
 custom:
-  ingredientTableName: ingredient-table
+  ingredientTableName: ingredient-table-${self:provider.stage}
 
 plugins:
   - serverless-iam-roles-per-function
@@ -18,7 +18,7 @@ plugins:
 functions:
   getIngredientById:
     handler: src/api.getIngredientById
-    name: get-Ingredient-By-Id
+    name: get-ingredient-by-id
     memorySize: 128 # mb
     timeout: 5 # seconds
     events:

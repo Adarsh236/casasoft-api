@@ -29,7 +29,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:GetItem"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt IngredientTable.Arn
   createIngredient:
     handler: src/api.createIngredient
     name: create-ingredient
@@ -43,7 +43,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt IngredientTable.Arn
   updateIngredientById:
     handler: src/api.updateIngredientById
     name: update-ingredient-by-id
@@ -57,7 +57,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:UpdateItem"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt IngredientTable.Arn
   deleteIngredientById:
     handler: src/api.deleteIngredientById
     name: delete-ingredient-by-id
@@ -71,7 +71,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:DeleteItem"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt IngredientTable.Arn
   findIngredients:
     handler: src/api.findIngredients
     name: find-ingredients
@@ -85,11 +85,11 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:Scan"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: !GetAtt IngredientTable.Arn
 
 resources:
   Resources:
-    PostsTable:
+    IngredientTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:custom.ingredientTableName}

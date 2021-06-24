@@ -103,10 +103,10 @@ const getIngredientById = async (event) => {
 
 const createIngredient = async (event) => {
   const response = { statusCode: 200 };
-  const body = JSON.parse(event.body);
+  const body = JSON.parse(ingredientInfo(event.body));
   const params = {
     TableName: process.env.INGREDIENT_TABLE,
-    Item: marshall(ingredientInfo(body) || {}),
+    Item: marshall(body || {}),
   };
   console.log(params);
   try {

@@ -190,7 +190,7 @@ const deleteIngredientById = async (event) => {
   return response;
 };
 
-const getAllPosts = async () => {
+const findIngredients = async () => {
   const response = { statusCode: 200 };
 
   try {
@@ -217,5 +217,5 @@ module.exports = {
   createIngredient,
   updateIngredientById,
   deleteIngredientById,
-  getAllPosts,
+  findIngredients,
 };

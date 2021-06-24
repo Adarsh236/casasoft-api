@@ -72,8 +72,8 @@ functions:
         Action:
           - "dynamodb:DeleteItem"
         Resource: !GetAtt PostsTable.Arn
-  getAllPosts:
-    handler: src/api.getAllPosts
+  findIngredients:
+    handler: src/api.findIngredients
     name: get-all-posts
     memorySize: 128 # mb
     timeout: 5 # seconds

@@ -23,7 +23,7 @@ const ingredientInfo = (ingredient) => {
   };
 };
 
-const getMsg = (msg, method, isSucceed) => {
+const getMsg = (msg, method, isSucceed, data) => {
   if (isSucceed) {
     return JSON.stringify({
       message: `Successfully ${method} all posts.`,
@@ -35,6 +35,7 @@ const getMsg = (msg, method, isSucceed) => {
       message: `Failed to ${method} ingredient.`,
       errorMsg: msg.message,
       errorStack: msg.stack,
+      errorStack1: data,
     });
   }
 };
@@ -101,14 +102,13 @@ const getIngredientById = async (event) => {
 
 const createIngredient = async (event) => {
   const response = { statusCode: 200 };
-
+  const body = JSON.parse(event.body);
+  const params = {
+    TableName: process.env.INGREDIENT_TABLE,
+    Item: marshall(ingredientInfo(body)),
+  };
+  console.log(params);
   try {
-    const body = JSON.parse(event.body);
-    const params = {
-      TableName: process.env.INGREDIENT_TABLE,
-      Item: marshall(ingredientInfo(body)),
-    };
-    console.log(params);
     const createResult = await db.send(new PutItemCommand(params));
 
     response.body = JSON.stringify({
@@ -118,7 +118,7 @@ const createIngredient = async (event) => {
   } catch (e) {
     console.error(e);
     response.statusCode = 500;
-    response.body = getMsg(e, "create", false);
+    response.body = getMsg(e, "create", false, params);
   }
 
   return response;

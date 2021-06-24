@@ -36,6 +36,7 @@ const getMsg = (msg, method, isSucceed, data) => {
       errorMsg: msg.message,
       errorStack: msg.stack,
       errorStack1: data,
+      errorStack2: ingredientInfo(data),
     });
   }
 };
@@ -105,7 +106,7 @@ const createIngredient = async (event) => {
   const body = JSON.parse(event.body);
   const params = {
     TableName: process.env.INGREDIENT_TABLE,
-    Item: marshall(ingredientInfo(body)),
+    Item: marshall(ingredientInfo(body) || {}),
   };
   console.log(params);
   try {
@@ -118,7 +119,7 @@ const createIngredient = async (event) => {
   } catch (e) {
     console.error(e);
     response.statusCode = 500;
-    response.body = getMsg(e, "create", false, params);
+    response.body = getMsg(e, "create", false, body);
   }
 
   return response;

@@ -7,12 +7,12 @@ const {
   UpdateItemCommand,
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const uuidv4 = require("uuid/v4");
+const uuid = require("uuid");
 
 const ingredientInfo = (ingredient) => {
   const timestamp = new Date().getTime();
   return {
-    id: uuidv4(),
+    id: uuid.v1(),
     title: ingredient.title,
     img: ingredient.img,
     fat: ingredient.fat,

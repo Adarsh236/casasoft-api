@@ -74,7 +74,7 @@ functions:
         Resource: !GetAtt PostsTable.Arn
   findIngredients:
     handler: src/api.findIngredients
-    name: get-all-posts
+    name: find-ingredients
     memorySize: 128 # mb
     timeout: 5 # seconds
     events:

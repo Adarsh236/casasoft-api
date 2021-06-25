@@ -17,6 +17,8 @@ provider:
         - s3:*
         - ses:*
       Resource: "*"
+  apiKeys:
+    - Ingredient_API_Key
 
 custom:
   ingredientTableName: ingredient-table-${self:provider.stage}
@@ -36,6 +38,7 @@ functions:
           path: ingredient/{id}
           method: GET
           cors: true
+          private: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -51,6 +54,7 @@ functions:
           path: ingredient
           method: POST
           cors: true
+          private: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -67,6 +71,7 @@ functions:
           path: ingredient/{id}
           method: PUT
           cors: true
+          private: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -82,6 +87,7 @@ functions:
           path: ingredient/{id}
           method: DELETE
           cors: true
+          private: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -99,6 +105,7 @@ functions:
           path: ingredient/find
           method: POST
           cors: true
+          private: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:

@@ -15,25 +15,16 @@ exports.handler = async (event) => {
       TableName: process.env.INGREDIENT_TABLE,
       Key: marshall({ id: event.pathParameters.id }),
     };
-
     const { Item } = await db.send(new GetItemCommand(params));
     const result = Item ? unmarshall(Item) : {};
-    console.log(result);
     const img = result.img;
 
     if (img) {
       const res = await isImageDeleted(img);
-      console.log(res);
-      if (!res) {
-        console.log("!isImageDeleted*");
-        throw new Error("Img not delete");
-      } else {
-        console.log("isImageDeleted-");
-      }
+      if (!res) throw new Error("Img not delete");
     }
 
     const deleteResult = await db.send(new DeleteItemCommand(params));
-
     response.body = getMsg(deleteResult, "deleted", true);
   } catch (e) {
     console.error(e);

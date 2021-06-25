@@ -9,10 +9,7 @@ exports.handler = async (event) => {
     const tableName = process.env.INGREDIENT_TABLE;
     if (img) body.img = await getUploadImageUrl(img);
 
-    const deleteResult = await Dynamo.delete(id, tableName).catch((err) => {
-      console.log("error in Dynamo ", err);
-      return null;
-    });
+    const deleteResult = await Dynamo.delete(id, tableName);
 
     response.body = getMsg(deleteResult, "deleted", true);
   } catch (e) {

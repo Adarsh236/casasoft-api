@@ -18,7 +18,7 @@ const Dynamo = {
       TableName: tableName,
       Item: marshall(data || {}),
     };
-    return await db.send(new PutItemCommand(params)).promise();
+    return await db.send(new PutItemCommand(params));
   },
 
   delete: async (id, tableName) => {
@@ -35,14 +35,11 @@ const Dynamo = {
       if (!res) throw new Error("Img not delete");
     }
 
-    return await db.send(new DeleteItemCommand(params)).promise();
+    return await db.send(new DeleteItemCommand(params));
   },
 
   find: async (data, tableName) => {
-    const { Items } = await db
-      .send(new ScanCommand({ TableName: tableName }))
-      .promise();
-
+    const { Items } = await db.send(new ScanCommand({ TableName: tableName }));
     return Items.map((item) => unmarshall(item));
   },
 
@@ -83,7 +80,7 @@ const Dynamo = {
       ),
     };
 
-    return await db.send(new UpdateItemCommand(params)).promise();
+    return await db.send(new UpdateItemCommand(params));
   },
 };
 

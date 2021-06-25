@@ -9,12 +9,7 @@ exports.handler = async (event) => {
     const body = ingredientInfo(JSON.parse(event.body));
     const id = event.pathParameters.id;
     const tableName = process.env.INGREDIENT_TABLE;
-    const updatedResult = await Dynamo.update(id, body, tableName).catch(
-      (err) => {
-        console.log("error in Dynamo get", err);
-        return null;
-      }
-    );
+    const updatedResult = await Dynamo.update(id, body, tableName);
 
     console.log("updatedResult");
     console.log(updatedResult);

@@ -14,10 +14,7 @@ exports.handler = async (event) => {
 
     if (img) body.img = await getUploadImageUrl(img);
 
-    const createResult = await Dynamo.create(body, tableName).catch((err) => {
-      console.log("error in Dynamo ", err);
-      return null;
-    });
+    const createResult = await Dynamo.create(body, tableName);
 
     response.body = getMsg(createResult, "created", true);
   } catch (e) {

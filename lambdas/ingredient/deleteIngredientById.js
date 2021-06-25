@@ -17,8 +17,9 @@ exports.handler = async (event) => {
     };
 
     const { Item } = await db.send(new GetItemCommand(params));
-    console.log(Item);
-    const img = JSON.stringify(unmarshall(Item)).img;
+    const result = Item ? unmarshall(Item) : {};
+    console.log(result);
+    const img = JSON.stringify(result).img;
 
     if (img) {
       if (!isImageDeleted(img)) {

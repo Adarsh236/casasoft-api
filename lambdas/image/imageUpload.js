@@ -45,6 +45,7 @@ const getUploadImageUrl = async (event) => {
 
 const isImageDeleted = async (event) => {
   try {
+    console.log("img");
     console.log(event);
     let split = event.split("amazonaws.com/", 2);
     console.log("split");

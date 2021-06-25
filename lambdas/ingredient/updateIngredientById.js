@@ -19,6 +19,8 @@ exports.handler = async (event) => {
         if (!res) throw new Error("Img not delete"); */
       }
     }
+    console.log(".img");
+    console.log(body.img);
 
     const updatedResult = await Dynamo.update(id, body, tableName);
 

@@ -86,7 +86,9 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:DeleteItem"
-        Resource: !GetAtt IngredientTable.Arn
+          - "dynamodb:GetItem"
+          - "s3:*"
+        Resource: [!GetAtt IngredientTable.Arn, "*"]
   findIngredients:
     handler: lambdas/ingredient/findIngredients.handler
     name: find-ingredients

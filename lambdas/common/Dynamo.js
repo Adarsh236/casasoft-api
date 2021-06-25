@@ -1,90 +1,89 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const client = new DynamoDBClient({});
+const { marshall, unmarshall, ScanCommand } = require("@aws-sdk/util-dynamodb");
+const {
+  PutItemCommand,
+  GetItemCommand,
+  DeleteItemCommand,
+  UpdateItemCommand,
+} = require("@aws-sdk/client-dynamodb");
 
-module.exports = client;
+const { isImageDeleted } = require("../image/imageUpload");
 
-/* 
-
-const AWS = require('aws-sdk');
-
-const documentClient = new AWS.DynamoDB.DocumentClient();
+const db = new DynamoDBClient({});
 
 const Dynamo = {
-    async get(ID, TableName) {
-        const params = {
-            TableName,
-            Key: {
-                ID,
-            },
-        };
+  create: async (data, tableName) => {
+    const params = {
+      TableName: tableName,
+      Item: marshall(data || {}),
+    };
+    return await db.send(new PutItemCommand(params)).promise();
+  },
 
-        const data = await documentClient.get(params).promise();
+  delete: async (id, tableName) => {
+    const params = {
+      TableName: tableName,
+      Key: marshall({ id: id }),
+    };
+    const { Item } = await db.send(new GetItemCommand(params));
+    const result = Item ? unmarshall(Item) : {};
+    const img = result.img;
 
-        if (!data || !data.Item) {
-            throw Error(`There was an error fetching the data for ID of ${ID} from ${TableName}`);
-        }
-        console.log(data);
+    if (img) {
+      const res = await isImageDeleted(img);
+      if (!res) throw new Error("Img not delete");
+    }
 
-        return data.Item;
-    },
+    return await db.send(new DeleteItemCommand(params)).promise();
+  },
 
-    async write(data, TableName) {
-        if (!data.ID) {
-            throw Error('no ID on the data');
-        }
+  find: async (data, tableName) => {
+    const { Items } = await db
+      .send(new ScanCommand({ TableName: tableName }))
+      .promise();
 
-        const params = {
-            TableName,
-            Item: data,
-        };
+    return Items.map((item) => unmarshall(item));
+  },
 
-        const res = await documentClient.put(params).promise();
+  get: async (id, tableName) => {
+    const params = {
+      TableName: tableName,
+      Key: marshall({ id: id }),
+    };
+    const { Item } = await db.send(new GetItemCommand(params));
 
-        if (!res) {
-            throw Error(`There was an error inserting ID of ${data.ID} in table ${TableName}`);
-        }
+    const findResult = Item ? unmarshall(Item) : {};
+    return findResult;
+  },
 
-        return data;
-    },
+  update: async (id, data, tableName) => {
+    const objKeys = Object.keys(data);
+    const params = {
+      TableName: tableName,
+      Key: marshall({ id: id }),
+      UpdateExpression: `SET ${objKeys
+        .map((_, index) => `#key${index} = :value${index}`)
+        .join(", ")}`,
+      ExpressionAttributeNames: objKeys.reduce(
+        (acc, key, index) => ({
+          ...acc,
+          [`#key${index}`]: key,
+        }),
+        {}
+      ),
+      ExpressionAttributeValues: marshall(
+        objKeys.reduce(
+          (acc, key, index) => ({
+            ...acc,
+            [`:value${index}`]: data[key],
+          }),
+          {}
+        )
+      ),
+    };
 
-    update: async ({ tableName, primaryKey, primaryKeyValue, updateKey, updateValue }) => {
-        const params = {
-            TableName: tableName,
-            Key: { [primaryKey]: primaryKeyValue },
-            UpdateExpression: `set ${updateKey} = :updateValue`,
-            ExpressionAttributeValues: {
-                ':updateValue': updateValue,
-            },
-        };
-
-        return documentClient.update(params).promise();
-    },
-
-    query: async ({ tableName, index, queryKey, queryValue }) => {
-        const params = {
-            TableName: tableName,
-            IndexName: index,
-            KeyConditionExpression: `${queryKey} = :hkey`,
-            ExpressionAttributeValues: {
-                ':hkey': queryValue,
-            },
-        };
-
-        const res = await documentClient.query(params).promise();
-
-        return res.Items || [];
-    },
-
-    scan: async ({ tableName, filterExpression, expressionAttributes }) => {
-        const params = {
-            TableName: tableName,
-            FilterExpression: filterExpression,
-            ExpressionAttributeValues: expressionAttributes,
-        };
-        const res = await documentClient.scan(params).promise();
-
-        return res.Items || [];
-    },
+    return await db.send(new UpdateItemCommand(params)).promise();
+  },
 };
-export default Dynamo;
- */
+
+module.exports = Dynamo;

@@ -1,8 +1,6 @@
-const { PutItemCommand } = require("@aws-sdk/client-dynamodb");
-const { marshall } = require("@aws-sdk/util-dynamodb");
 const uuid = require("uuid");
 
-const db = require("../common/Dynamo");
+const Dynamo = require("../common/Dynamo");
 const { getUploadImageUrl } = require("../image/imageUpload");
 const { getMsg, getResponse } = require("../common/API_Responses");
 
@@ -11,13 +9,16 @@ exports.handler = async (event) => {
 
   try {
     let body = ingredientInfo(JSON.parse(event.body));
-    let img = String(body.img);
+    const img = String(body.img);
+    const id = event.pathParameters.id;
+    const tableName = process.env.INGREDIENT_TABLE;
+
     if (img) body.img = await getUploadImageUrl(img);
-    const params = {
-      TableName: process.env.INGREDIENT_TABLE,
-      Item: marshall(body || {}),
-    };
-    const createResult = await db.send(new PutItemCommand(params));
+
+    const createResult = await Dynamo.create(body, tableName).catch((err) => {
+      console.log("error in Dynamo ", err);
+      return null;
+    });
 
     response.body = getMsg(createResult, "created", true);
   } catch (e) {

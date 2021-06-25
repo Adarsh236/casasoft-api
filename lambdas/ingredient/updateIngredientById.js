@@ -1,7 +1,4 @@
-const { UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
-const { marshall } = require("@aws-sdk/util-dynamodb");
-
-const db = require("../common/Dynamo");
+const Dynamo = require("../common/Dynamo");
 const { getUploadImageUrl } = require("../image/imageUpload");
 const { getMsg, getResponse } = require("../common/API_Responses");
 
@@ -9,66 +6,19 @@ exports.handler = async (event) => {
   const response = getResponse();
 
   try {
-    let body = ingredientInfo(JSON.parse(event.body));
-    console.log(body);
-    /* const objKeys = Object.keys(body);
-    const params = {
-      TableName: process.env.INGREDIENT_TABLE,
-      Key: marshall({ id: event.pathParameters.id }),
-      UpdateExpression: `SET ${objKeys
-        .map((_, index) => `#key${index} = :value${index}`)
-        .join(", ")}`,
-      ExpressionAttributeNames: objKeys.reduce(
-        (acc, key, index) => ({
-          ...acc,
-          [`#key${index}`]: key,
-        }),
-        {}
-      ),
-      ExpressionAttributeValues: marshall(
-        objKeys.reduce(
-          (acc, key, index) => ({
-            ...acc,
-            [`:value${index}`]: body[key],
-          }),
-          {}
-        )
-      ),
-    };
-    const body = JSON.parse(event.body); */
-    const objKeys = Object.keys(body);
-    console.log("objKeys");
-    console.log(objKeys);
-    const params = {
-      TableName: process.env.INGREDIENT_TABLE,
-      Key: marshall({ id: event.pathParameters.id }),
-      UpdateExpression: `SET ${objKeys
-        .map((_, index) => `#key${index} = :value${index}`)
-        .join(", ")}`,
-      ExpressionAttributeNames: objKeys.reduce(
-        (acc, key, index) => ({
-          ...acc,
-          [`#key${index}`]: key,
-        }),
-        {}
-      ),
-      ExpressionAttributeValues: marshall(
-        objKeys.reduce(
-          (acc, key, index) => ({
-            ...acc,
-            [`:value${index}`]: body[key],
-          }),
-          {}
-        )
-      ),
-    };
-    console.log("params");
-    console.log(params);
-    const updateResult = await db.send(new UpdateItemCommand(params));
+    const body = ingredientInfo(JSON.parse(event.body));
+    const id = event.pathParameters.id;
+    const tableName = process.env.INGREDIENT_TABLE;
+    const updatedResult = await Dynamo.update(id, body, tableName).catch(
+      (err) => {
+        console.log("error in Dynamo get", err);
+        return null;
+      }
+    );
 
-    console.log("updateResult");
-    console.log(updateResult);
-    response.body = getMsg(updateResult, "updated", true);
+    console.log("updatedResult");
+    console.log(updatedResult);
+    response.body = getMsg(updatedResult, "updated", true);
   } catch (e) {
     console.error(e);
     response.statusCode = 500;

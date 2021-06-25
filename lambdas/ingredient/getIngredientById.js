@@ -1,22 +1,16 @@
-const { GetItemCommand } = require("@aws-sdk/client-dynamodb");
-const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-
-const db = require("../common/Dynamo");
+const Dynamo = require("../common/Dynamo");
 const { getMsg, getResponse } = require("../common/API_Responses");
 
 exports.handler = async (event) => {
   const response = getResponse();
 
   try {
-    const params = {
-      TableName: process.env.INGREDIENT_TABLE,
-      Key: marshall({ id: event.pathParameters.id }),
-    };
-    const { Item } = await db.send(new GetItemCommand(params));
+    const id = event.pathParameters.id;
+    const tableName = process.env.INGREDIENT_TABLE;
+    const item = await Dynamo.get(id, tableName);
 
-    const result = Item ? unmarshall(Item) : {};
-    result.message = "Successfully retrieved ingredient.";
-    response.body = JSON.stringify(result);
+    item.message = "Successfully retrieved ingredient.";
+    response.body = JSON.stringify(item);
   } catch (e) {
     console.error(e);
     response.statusCode = 500;

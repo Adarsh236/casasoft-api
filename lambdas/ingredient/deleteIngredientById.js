@@ -1,31 +1,19 @@
-const {
-  DeleteItemCommand,
-  GetItemCommand,
-} = require("@aws-sdk/client-dynamodb");
-const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-
-const db = require("../common/Dynamo");
-const { isImageDeleted } = require("../image/imageUpload");
+const Dynamo = require("../common/Dynamo");
 const { getMsg, getResponse } = require("../common/API_Responses");
 
 exports.handler = async (event) => {
   const response = getResponse();
 
   try {
-    const params = {
-      TableName: process.env.INGREDIENT_TABLE,
-      Key: marshall({ id: event.pathParameters.id }),
-    };
-    const { Item } = await db.send(new GetItemCommand(params));
-    const result = Item ? unmarshall(Item) : {};
-    const img = result.img;
+    const id = event.pathParameters.id;
+    const tableName = process.env.INGREDIENT_TABLE;
+    if (img) body.img = await getUploadImageUrl(img);
 
-    if (img) {
-      const res = await isImageDeleted(img);
-      if (!res) throw new Error("Img not delete");
-    }
+    const deleteResult = await Dynamo.delete(id, tableName).catch((err) => {
+      console.log("error in Dynamo ", err);
+      return null;
+    });
 
-    const deleteResult = await db.send(new DeleteItemCommand(params));
     response.body = getMsg(deleteResult, "deleted", true);
   } catch (e) {
     console.error(e);

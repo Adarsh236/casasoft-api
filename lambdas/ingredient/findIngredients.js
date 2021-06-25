@@ -1,21 +1,20 @@
-const { ScanCommand } = require("@aws-sdk/client-dynamodb");
-const { unmarshall } = require("@aws-sdk/util-dynamodb");
-
-const db = require("../common/Dynamo");
+const Dynamo = require("../common/Dynamo");
 const { getMsg, getResponse } = require("../common/API_Responses");
 
 exports.handler = async () => {
   const response = getResponse();
 
   try {
-    const { Items } = await db.send(
-      new ScanCommand({ TableName: process.env.INGREDIENT_TABLE })
-    );
+    const tableName = process.env.INGREDIENT_TABLE;
+    const list = await Dynamo.find(_, tableName).catch((err) => {
+      console.log("error in Dynamo ", err);
+      return null;
+    });
 
     response.body = JSON.stringify({
       message: "Successfully retrieved all ingredient.",
-      items: Items.map((item) => unmarshall(item)),
-      total: Items.length,
+      items: list,
+      total: list.length,
     });
   } catch (e) {
     console.error(e);

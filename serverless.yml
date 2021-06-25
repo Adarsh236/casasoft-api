@@ -25,6 +25,7 @@ functions:
       - http:
           path: ingredient/{id}
           method: GET
+          cors: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -39,6 +40,7 @@ functions:
       - http:
           path: ingredient
           method: POST
+          cors: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -53,6 +55,7 @@ functions:
       - http:
           path: ingredient/{id}
           method: PUT
+          cors: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -67,6 +70,7 @@ functions:
       - http:
           path: ingredient/{id}
           method: DELETE
+          cors: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -81,6 +85,7 @@ functions:
       - http:
           path: ingredient/find
           method: POST
+          cors: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:

@@ -23,6 +23,14 @@ const ingredientInfo = (ingredient) => {
   };
 };
 
+const getResponse = () => ({
+  statusCode: 200,
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+  },
+});
+
 const getMsg = (msg, method, isSucceed) => {
   if (isSucceed) {
     return JSON.stringify({
@@ -39,7 +47,7 @@ const getMsg = (msg, method, isSucceed) => {
 };
 
 const getIngredientById = async (event) => {
-  const response = { statusCode: 200 };
+  const response = getResponse();
 
   try {
     const params = {
@@ -61,7 +69,7 @@ const getIngredientById = async (event) => {
 };
 
 const createIngredient = async (event) => {
-  const response = { statusCode: 200 };
+  const response = getResponse();
 
   try {
     const body = ingredientInfo(JSON.parse(event.body));
@@ -82,7 +90,7 @@ const createIngredient = async (event) => {
 };
 
 const updateIngredientById = async (event) => {
-  const response = { statusCode: 200 };
+  const response = getResponse();
 
   try {
     const body = JSON.parse(event.body);
@@ -123,7 +131,7 @@ const updateIngredientById = async (event) => {
 };
 
 const deleteIngredientById = async (event) => {
-  const response = { statusCode: 200 };
+  const response = getResponse();
 
   try {
     const params = {
@@ -143,7 +151,7 @@ const deleteIngredientById = async (event) => {
 };
 
 const findIngredients = async () => {
-  const response = { statusCode: 200 };
+  const response = getResponse();
 
   try {
     const { Items } = await db.send(

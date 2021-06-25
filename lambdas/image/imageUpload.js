@@ -45,25 +45,22 @@ const getUploadImageUrl = async (event) => {
 
 const isImageDeleted = async (event) => {
   try {
-    console.log("img");
-    console.log(event);
-    let split = event.split("amazonaws.com/", 2);
-    console.log("split");
-    console.log(split);
+    const split = event.split("amazonaws.com/", 2);
     const key = split[1];
     console.log("key");
     console.log(key);
-    const deleteObject = s3.deleteObject(
-      {
-        Bucket: process.env.IMG_BUCKET,
-        Key: key,
-      },
-      function (err, data) {
-        if (err) return false;
-        else return true;
-      }
-    );
-    return deleteObject;
+    return await s3
+      .deleteObject(
+        {
+          Bucket: process.env.IMG_BUCKET,
+          Key: key,
+        },
+        function (err, data) {
+          if (err) return false;
+          else return true;
+        }
+      )
+      .promise();
   } catch (error) {
     return false;
   }

@@ -22,11 +22,13 @@ exports.handler = async (event) => {
     const img = result.img;
 
     if (img) {
-      if (!isImageDeleted(img)) {
-        console.log("!isImageDeleted");
+      const res = await isImageDeleted(img);
+      console.log(res);
+      if (!res) {
+        console.log("!isImageDeleted*");
         throw new Error("Img not delete");
       } else {
-        console.log("isImageDeleted");
+        console.log("isImageDeleted-");
       }
     }
 

@@ -11,7 +11,7 @@ const s3 = new AWS.S3();
 
 const allowedMimes = ["image/jpeg", "image/png", "image/jpg"];
 
-module.exports.imageUpload = async (event) => {
+const imageUpload = async (event) => {
   try {
     //const body = JSON.parse(event);
     const body = event;
@@ -67,4 +67,8 @@ module.exports.imageUpload = async (event) => {
       message: error.message || "failed to upload image",
     });
   }
+};
+
+module.exports = {
+  imageUpload,
 };

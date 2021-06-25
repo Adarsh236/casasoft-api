@@ -8,7 +8,7 @@ const {
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const uuid = require("uuid");
-const imageUpload = require("./imageUpload");
+const { imageUpload } = require("./imageUpload");
 
 const ingredientInfo = (ingredient) => {
   const timestamp = new Date().getTime();

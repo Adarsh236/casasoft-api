@@ -8,6 +8,7 @@ const {
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const uuid = require("uuid");
+const imageUpload = require("./imageUpload");
 
 const ingredientInfo = (ingredient) => {
   const timestamp = new Date().getTime();
@@ -72,7 +73,9 @@ const createIngredient = async (event) => {
   const response = getResponse();
 
   try {
-    const body = ingredientInfo(JSON.parse(event.body));
+    let body = ingredientInfo(JSON.parse(event.body));
+    let img = body.img;
+    if (img) body.img = await imageUpload(img);
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
       Item: marshall(body || {}),
@@ -81,6 +84,7 @@ const createIngredient = async (event) => {
 
     response.body = getMsg(createResult, "created", true);
   } catch (e) {
+    console.log(e);
     console.error(e);
     response.statusCode = 500;
     response.body = getMsg(e, "create", false);

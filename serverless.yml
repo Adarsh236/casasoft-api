@@ -8,9 +8,19 @@ provider:
   apiName: casasoft-api
   environment:
     INGREDIENT_TABLE: ${self:custom.ingredientTableName}
+    IMG_BUCKET: ${self:custom.imgBucketName}
+    region: ${self:provider.region}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+        - s3:*
+        - ses:*
+      Resource: "*"
 
 custom:
   ingredientTableName: ingredient-table-${self:provider.stage}
+  imgBucketName: ingredient-img-bucket-${self:provider.stage}
 
 plugins:
   - serverless-iam-roles-per-function
@@ -94,6 +104,11 @@ functions:
 
 resources:
   Resources:
+    ImageUploadBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.imgBucketName}
+        AccessControl: PublicRead
     IngredientTable:
       Type: AWS::DynamoDB::Table
       Properties:

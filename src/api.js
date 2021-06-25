@@ -103,12 +103,16 @@ const getIngredientById = async (event) => {
 
 const createIngredient = async (event) => {
   const response = { statusCode: 200 };
-  const body = JSON.parse(ingredientInfo(event.body));
+  const body = ingredientInfo(JSON.parse(event.body));
   const params = {
     TableName: process.env.INGREDIENT_TABLE,
     Item: marshall(body || {}),
   };
-  console.log(params);
+  let dd = [];
+  dd.push(event.body);
+  dd.push(JSON.parse(event.body));
+  dd.push(ingredientInfo(event.body));
+  dd.push(body);
   try {
     const createResult = await db.send(new PutItemCommand(params));
 
@@ -119,7 +123,7 @@ const createIngredient = async (event) => {
   } catch (e) {
     console.error(e);
     response.statusCode = 500;
-    response.body = getMsg(e, "create", false, body);
+    response.body = getMsg(e, "create", false, dd);
   }
 
   return response;

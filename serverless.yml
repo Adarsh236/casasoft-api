@@ -55,8 +55,8 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
-          - "s3:*
-        Resource: !GetAtt IngredientTable.Arn
+          - "s3:*"
+        Resource: [!GetAtt IngredientTable.Arn, "*"]
   updateIngredientById:
     handler: src/api.updateIngredientById
     name: update-ingredient-by-id
@@ -71,10 +71,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:UpdateItem"
-        Resource: [
-          !GetAtt IngredientTable.Arn,
-          "*"
-        ]
+        Resource: !GetAtt IngredientTable.Arn
   deleteIngredientById:
     handler: src/api.deleteIngredientById
     name: delete-ingredient-by-id

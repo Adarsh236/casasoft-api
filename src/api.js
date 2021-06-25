@@ -74,7 +74,7 @@ const createIngredient = async (event) => {
 
   try {
     let body = ingredientInfo(JSON.parse(event.body));
-    let img = body.img;
+    let img = String(body.img);
     if (img) body.img = await imageUpload(img);
     const params = {
       TableName: process.env.INGREDIENT_TABLE,

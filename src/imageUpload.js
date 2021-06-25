@@ -14,7 +14,7 @@ const allowedMimes = ["image/jpeg", "image/png", "image/jpg"];
 const imageUpload = async (event) => {
   try {
     //const body = JSON.parse(event);
-    const body = event;
+    const body = event.split(";", 2)[1];
 
     /* if (!body || !body.image || !body.mime) {
             return Responses._400({ message: 'incorrect body on request' });

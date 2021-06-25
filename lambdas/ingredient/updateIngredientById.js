@@ -37,6 +37,8 @@ exports.handler = async (event) => {
     };
     const body = JSON.parse(event.body); */
     const objKeys = Object.keys(body);
+    console.log("objKeys");
+    console.log(objKeys);
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
       Key: marshall({ id: event.pathParameters.id }),
@@ -60,8 +62,12 @@ exports.handler = async (event) => {
         )
       ),
     };
+    console.log("params");
+    console.log(params);
     const updateResult = await db.send(new UpdateItemCommand(params));
 
+    console.log("updateResult");
+    console.log(updateResult);
     response.body = getMsg(updateResult, "updated", true);
   } catch (e) {
     console.error(e);

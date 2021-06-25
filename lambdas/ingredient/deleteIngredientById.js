@@ -1,7 +1,7 @@
 const db = require("../common/Dynamo");
 const { DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall } = require("@aws-sdk/util-dynamodb");
-const { getUploadImageUrl } = require("../image/getUploadImageUrl");
+const { getUploadImageUrl } = require("../image/imageUpload");
 const { getMsg, getResponse } = require("../common/API_Responses");
 
 exports.handler = async (event) => {

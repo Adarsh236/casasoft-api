@@ -1,14 +1,25 @@
 const Dynamo = require("../common/Dynamo");
-const { getUploadImageUrl } = require("../image/imageUpload");
+const { getUploadImageUrl, isImageDeleted } = require("../image/imageUpload");
 const { getMsg, getResponse } = require("../common/API_Responses");
 
 exports.handler = async (event) => {
   const response = getResponse();
 
   try {
-    const body = ingredientInfo(JSON.parse(event.body));
+    let body = ingredientInfo(JSON.parse(event.body));
+    const img = body.img;
     const id = event.pathParameters.id;
     const tableName = process.env.INGREDIENT_TABLE;
+
+    if (img) {
+      if (!img.includes("amazonaws.com/")) {
+        body.img = await getUploadImageUrl(img);
+      } else if (img.includes("amazonaws.com/")) {
+        /* const res = await isImageDeleted(img);
+        if (!res) throw new Error("Img not delete"); */
+      }
+    }
+
     const updatedResult = await Dynamo.update(id, body, tableName);
 
     console.log("updatedResult");

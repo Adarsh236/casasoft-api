@@ -1,5 +1,8 @@
 const db = require("../common/Dynamo");
-const { DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+const {
+  DeleteItemCommand,
+  GetItemCommand,
+} = require("@aws-sdk/client-dynamodb");
 const { marshall } = require("@aws-sdk/util-dynamodb");
 const { isImageDeleted } = require("../image/imageUpload");
 const { getMsg, getResponse } = require("../common/API_Responses");
@@ -13,7 +16,10 @@ exports.handler = async (event) => {
       Key: marshall({ id: event.pathParameters.id }),
     };
 
-    const img = JSON.parse(event.body).img;
+    const { Item } = await db.send(new GetItemCommand(params));
+    console.log(Item);
+    const img = Item.img;
+
     if (img) {
       if (!isImageDeleted(img)) {
         response.statusCode = 500;

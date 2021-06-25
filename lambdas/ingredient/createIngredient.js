@@ -10,7 +10,6 @@ exports.handler = async (event) => {
   try {
     let body = ingredientInfo(JSON.parse(event.body));
     const img = String(body.img);
-    const id = event.pathParameters.id;
     const tableName = process.env.INGREDIENT_TABLE;
 
     if (img) body.img = await getUploadImageUrl(img);

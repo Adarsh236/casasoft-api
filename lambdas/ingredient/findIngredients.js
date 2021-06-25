@@ -6,7 +6,7 @@ exports.handler = async () => {
 
   try {
     const tableName = process.env.INGREDIENT_TABLE;
-    const list = await Dynamo.find(_, tableName).catch((err) => {
+    const list = await Dynamo.find(null, tableName).catch((err) => {
       console.log("error in Dynamo ", err);
       return null;
     });

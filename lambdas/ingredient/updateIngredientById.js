@@ -9,7 +9,8 @@ exports.handler = async (event) => {
   const response = getResponse();
 
   try {
-    const body = JSON.parse(event.body);
+    let body = ingredientInfo(JSON.parse(event.body));
+    console.log(body);
     const objKeys = Object.keys(body);
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
@@ -44,4 +45,15 @@ exports.handler = async (event) => {
   }
 
   return response;
+};
+
+const ingredientInfo = (ingredient) => {
+  return {
+    id: ingredient.id,
+    title: ingredient.title,
+    img: ingredient.img,
+    fat: ingredient.fat,
+    calories: ingredient.calories,
+    carbohydrates: ingredient.carbohydrates,
+  };
 };

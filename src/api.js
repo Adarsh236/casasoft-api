@@ -82,7 +82,7 @@ const getIngredientById = async (event) => {
   try {
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
-      Key: marshall({ ingredientId: event.pathParameters.ingredientId }),
+      Key: marshall({ id: event.pathParameters.id }),
     };
     const { Item } = await db.send(new GetItemCommand(params));
 
@@ -137,7 +137,7 @@ const updateIngredientById = async (event) => {
     const objKeys = Object.keys(body);
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
-      Key: marshall({ ingredientId: event.pathParameters.ingredientId }),
+      Key: marshall({ id: event.pathParameters.id }),
       UpdateExpression: `SET ${objKeys
         .map((_, index) => `#key${index} = :value${index}`)
         .join(", ")}`,
@@ -179,7 +179,7 @@ const deleteIngredientById = async (event) => {
   try {
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
-      Key: marshall({ ingredientId: event.pathParameters.ingredientId }),
+      Key: marshall({ id: event.pathParameters.id }),
     };
     const deleteResult = await db.send(new DeleteItemCommand(params));
 

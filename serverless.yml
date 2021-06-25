@@ -23,7 +23,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: ingredient/{ingredientId}
+          path: ingredient/{id}
           method: GET
     iamRoleStatements:
       - Effect: "Allow"
@@ -51,7 +51,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: ingredient/{ingredientId}
+          path: ingredient/{id}
           method: PUT
     iamRoleStatements:
       - Effect: "Allow"
@@ -65,7 +65,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: ingredient/{ingredientId}
+          path: ingredient/{id}
           method: DELETE
     iamRoleStatements:
       - Effect: "Allow"
@@ -94,10 +94,10 @@ resources:
       Properties:
         TableName: ${self:custom.ingredientTableName}
         AttributeDefinitions:
-          - AttributeName: ingredientId
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: ingredientId
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

@@ -32,7 +32,7 @@ const getUploadImageUrl = async (event) => {
     console.log(".key");
     console.log(key);
 
-    await s3
+    const result = await s3
       .putObject({
         Body: buffer,
         Key: key,
@@ -41,12 +41,15 @@ const getUploadImageUrl = async (event) => {
         ACL: "public-read",
       })
       .promise();
+    console.log(".result");
+    console.log(result);
 
     const url = `https://${process.env.IMG_BUCKET}.s3-${process.env.region}.amazonaws.com/${key}`;
     console.log(".url");
     console.log(url);
     return url;
   } catch (error) {
+    console.log(error);
     return "";
   }
 };

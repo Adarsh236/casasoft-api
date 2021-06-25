@@ -1,10 +1,11 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { marshall, unmarshall, ScanCommand } = require("@aws-sdk/util-dynamodb");
+const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const {
   PutItemCommand,
   GetItemCommand,
   DeleteItemCommand,
   UpdateItemCommand,
+  ScanCommand,
 } = require("@aws-sdk/client-dynamodb");
 
 const { isImageDeleted } = require("../image/imageUpload");

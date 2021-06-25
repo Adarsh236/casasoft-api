@@ -1,7 +1,11 @@
-import Responses from "../common/API_Responses";
-import * as fileType from "file-type";
-import { v4 as uuid } from "uuid";
-import * as AWS from "aws-sdk";
+//import Responses from "../common/API_Responses";
+//import * as fileType from "file-type";
+//import { v4 as uuid } from "uuid";
+//import * as AWS from "aws-sdk";
+
+const fileType = require("file-type");
+const uuid = require("uuid");
+const AWS = require("aws-sdk");
 
 const s3 = new AWS.S3();
 
@@ -33,7 +37,7 @@ module.exports.imageUpload = async (event) => {
             return Responses._400({ message: 'mime types dont match' });
         } */
 
-    const name = uuid();
+    const name = uuid.v4();
     const key = `${name}.${detectedExt}`;
 
     console.log(`writing image to bucket called ${key}`);

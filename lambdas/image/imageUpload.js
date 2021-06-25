@@ -9,6 +9,8 @@ const getUploadImageUrl = async (event) => {
   try {
     let body = event.split(";", 2)[1];
     let imageData = body;
+    console.log(".body");
+    console.log(body);
 
     if (body.substr(0, 7) === "base64,") {
       imageData = body.substr(7, body.length);
@@ -18,6 +20,8 @@ const getUploadImageUrl = async (event) => {
     const fileInfo = await fileType.fromBuffer(buffer);
     const detectedExt = fileInfo.ext;
     const detectedMime = fileInfo.mime;
+    console.log(".fileInfo");
+    console.log(fileInfo);
 
     if (!allowedMimes.includes(detectedMime)) {
       return "";
@@ -37,6 +41,8 @@ const getUploadImageUrl = async (event) => {
       .promise();
 
     const url = `https://${process.env.IMG_BUCKET}.s3-${process.env.region}.amazonaws.com/${key}`;
+    console.log(".url");
+    console.log(url);
     return url;
   } catch (error) {
     return "";

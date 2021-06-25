@@ -23,58 +23,20 @@ const ingredientInfo = (ingredient) => {
   };
 };
 
-const getMsg = (msg, method, isSucceed, data) => {
+const getMsg = (msg, method, isSucceed) => {
   if (isSucceed) {
     return JSON.stringify({
-      message: `Successfully ${method} all posts.`,
-      data: Items.map((item) => unmarshall(item)),
-      Items,
+      message: `Successfully ${method} ingredient.`,
+      msg,
     });
   } else {
     return JSON.stringify({
       message: `Failed to ${method} ingredient.`,
       errorMsg: msg.message,
       errorStack: msg.stack,
-      errorStack1: data,
-      errorStack2: ingredientInfo(data),
     });
   }
 };
-/* const validation = (value, type) => {
-    const STRING = 'string';
-    const NUMBER = 'number';
-    if (type === STRING) {
-        if (typeof value !== STRING) {
-            return false;
-        }
-    } else if (type === NUMBER) {
-        if (typeof value !== NUMBER) {
-            return false;
-        }
-    } else {
-        return false;
-    }
-
-    return true;
-};
-
-const validation = (value, type) => {
-    const STRING = 'string';
-    const NUMBER = 'number';
-    if (type === STRING) {
-        if (typeof value !== STRING) {
-            return false;
-        }
-    } else if (type === NUMBER) {
-        if (typeof value !== NUMBER) {
-            return false;
-        }
-    } else {
-        return false;
-    }
-
-    return true;
-}; */
 
 const getIngredientById = async (event) => {
   const response = { statusCode: 200 };
@@ -84,14 +46,11 @@ const getIngredientById = async (event) => {
       TableName: process.env.INGREDIENT_TABLE,
       Key: marshall({ id: event.pathParameters.id }),
     };
-    const { Item } = await db.send(new GetItemCommand(params));
+    const { Obj } = await db.send(new GetItemCommand(params));
 
-    console.log({ Item });
-    response.body = JSON.stringify({
-      message: "Successfully retrieved ingredient.",
-      data: Item ? unmarshall(Item) : {},
-      rawData: Item,
-    });
+    const result = Obj ? unmarshall(Obj) : {};
+    result.message = "Successfully retrieved ingredient.";
+    response.body = JSON.stringify(result);
   } catch (e) {
     console.error(e);
     response.statusCode = 500;
@@ -103,27 +62,20 @@ const getIngredientById = async (event) => {
 
 const createIngredient = async (event) => {
   const response = { statusCode: 200 };
-  const body = ingredientInfo(JSON.parse(event.body));
-  const params = {
-    TableName: process.env.INGREDIENT_TABLE,
-    Item: marshall(body || {}),
-  };
-  let dd = [];
-  dd.push(event.body);
-  dd.push(JSON.parse(event.body));
-  dd.push(ingredientInfo(event.body));
-  dd.push(body);
+
   try {
+    const body = ingredientInfo(JSON.parse(event.body));
+    const params = {
+      TableName: process.env.INGREDIENT_TABLE,
+      Obj: marshall(body || {}),
+    };
     const createResult = await db.send(new PutItemCommand(params));
 
-    response.body = JSON.stringify({
-      message: "Successfully created ingredient.",
-      createResult,
-    });
+    response.body = getMsg(createResult, "created", true);
   } catch (e) {
     console.error(e);
     response.statusCode = 500;
-    response.body = getMsg(e, "create", false, dd);
+    response.body = getMsg(e, "create", false);
   }
 
   return response;
@@ -160,10 +112,7 @@ const updateIngredientById = async (event) => {
     };
     const updateResult = await db.send(new UpdateItemCommand(params));
 
-    response.body = JSON.stringify({
-      message: "Successfully updated ingredient.",
-      updateResult,
-    });
+    response.body = getMsg(updateResult, "updated", true);
   } catch (e) {
     console.error(e);
     response.statusCode = 500;
@@ -183,10 +132,7 @@ const deleteIngredientById = async (event) => {
     };
     const deleteResult = await db.send(new DeleteItemCommand(params));
 
-    response.body = JSON.stringify({
-      message: "Successfully deleted ingredient.",
-      deleteResult,
-    });
+    response.body = getMsg(deleteResult, "deleted", true);
   } catch (e) {
     console.error(e);
     response.statusCode = 500;
@@ -200,14 +146,14 @@ const findIngredients = async () => {
   const response = { statusCode: 200 };
 
   try {
-    const { Items } = await db.send(
+    const { List } = await db.send(
       new ScanCommand({ TableName: process.env.INGREDIENT_TABLE })
     );
 
     response.body = JSON.stringify({
-      message: "Successfully retrieved all posts.",
-      data: Items.map((item) => unmarshall(item)),
-      Items,
+      message: "Successfully retrieved all ingredient.",
+      items: List.map((Obj) => unmarshall(Obj)),
+      total: List.length,
     });
   } catch (e) {
     console.error(e);

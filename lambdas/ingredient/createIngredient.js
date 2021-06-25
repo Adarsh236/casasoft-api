@@ -20,7 +20,6 @@ exports.handler = async (event) => {
 
     response.body = getMsg(createResult, "created", true);
   } catch (e) {
-    console.log(e);
     console.error(e);
     response.statusCode = 500;
     response.body = getMsg(e, "create", false);

@@ -43,6 +43,27 @@ const getUploadImageUrl = async (event) => {
   }
 };
 
+const isImageDeleted = async (event) => {
+  try {
+    const key = event.split("amazonaws.com/", 2)[1];
+    console.log(key);
+    const deleteObject = s3.deleteObject(
+      {
+        Bucket: process.env.IMG_BUCKET,
+        Key: key,
+      },
+      function (err, data) {
+        if (err) return false;
+        else return true;
+      }
+    );
+    return deleteObject;
+  } catch (error) {
+    return false;
+  }
+};
+
 module.exports = {
   getUploadImageUrl,
+  isImageDeleted,
 };

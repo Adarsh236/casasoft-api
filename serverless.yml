@@ -76,7 +76,9 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:UpdateItem"
-        Resource: !GetAtt IngredientTable.Arn
+          - "dynamodb:GetItem"
+          - "s3:*"
+        Resource: [!GetAtt IngredientTable.Arn, "*"]
   deleteIngredientById:
     handler: lambdas/ingredient/deleteIngredientById.handler
     name: delete-ingredient-by-id

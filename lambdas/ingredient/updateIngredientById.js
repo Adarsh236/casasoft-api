@@ -1,7 +1,7 @@
-const db = require(".../common/Dynamo");
 const { UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall } = require("@aws-sdk/util-dynamodb");
-const uuid = require("uuid");
+
+const db = require("../common/Dynamo");
 const { getUploadImageUrl } = require("../image/imageUpload");
 const { getMsg, getResponse } = require("../common/API_Responses");
 

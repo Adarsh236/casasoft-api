@@ -1,6 +1,7 @@
-const db = require("../common/Dynamo");
 const { ScanCommand } = require("@aws-sdk/client-dynamodb");
 const { unmarshall } = require("@aws-sdk/util-dynamodb");
+
+const db = require("../common/Dynamo");
 const { getMsg, getResponse } = require("../common/API_Responses");
 
 exports.handler = async () => {

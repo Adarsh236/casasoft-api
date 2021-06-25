@@ -1,9 +1,10 @@
-const db = require("../common/Dynamo");
 const {
   DeleteItemCommand,
   GetItemCommand,
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
+
+const db = require("../common/Dynamo");
 const { isImageDeleted } = require("../image/imageUpload");
 const { getMsg, getResponse } = require("../common/API_Responses");
 

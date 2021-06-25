@@ -56,6 +56,9 @@ const isImageDeleted = async (event) => {
           Key: key,
         },
         function (err, data) {
+          console.log(err);
+          console.log("data");
+          console.log(data);
           if (err) return false;
           else return true;
         }

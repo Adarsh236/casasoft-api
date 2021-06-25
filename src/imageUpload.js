@@ -13,7 +13,8 @@ const allowedMimes = ["image/jpeg", "image/png", "image/jpg"];
 
 module.exports.imageUpload = async (event) => {
   try {
-    const body = JSON.parse(event);
+    //const body = JSON.parse(event);
+    const body = event;
 
     /* if (!body || !body.image || !body.mime) {
             return Responses._400({ message: 'incorrect body on request' });

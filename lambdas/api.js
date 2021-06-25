@@ -1,4 +1,4 @@
-const db = require("./db");
+/* const db = require("./common../common/Dynamo");
 const {
   GetItemCommand,
   PutItemCommand,
@@ -8,7 +8,7 @@ const {
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const uuid = require("uuid");
-const { imageUpload } = require("./imageUpload");
+const { getUploadImageUrl } = require("./getUploadImageUrl");
 
 const ingredientInfo = (ingredient) => {
   const timestamp = new Date().getTime();
@@ -75,7 +75,7 @@ const createIngredient = async (event) => {
   try {
     let body = ingredientInfo(JSON.parse(event.body));
     let img = String(body.img);
-    if (img) body.img = await imageUpload(img);
+    if (img) body.img = await getUploadImageUrl(img);
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
       Item: marshall(body || {}),
@@ -183,3 +183,4 @@ module.exports = {
   deleteIngredientById,
   findIngredients,
 };
+ */

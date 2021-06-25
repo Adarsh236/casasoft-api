@@ -46,7 +46,9 @@ const getUploadImageUrl = async (event) => {
 const isImageDeleted = async (event) => {
   try {
     console.log(event);
-    const key = event.split("amazonaws.com/", 2)[1];
+    let split = event.split("amazonaws.com/", 2);
+    console.log(split);
+    const key = split[1];
     console.log(key);
     const deleteObject = s3.deleteObject(
       {

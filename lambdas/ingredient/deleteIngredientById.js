@@ -22,10 +22,11 @@ exports.handler = async (event) => {
 
     if (img) {
       if (!isImageDeleted(img)) {
-        response.statusCode = 500;
-        response.body = getMsg(e, "delete", false);
+        console.log("!isImageDeleted");
+        throw new Error("Img not delete");
       }
     }
+
     const deleteResult = await db.send(new DeleteItemCommand(params));
 
     response.body = getMsg(deleteResult, "deleted", true);

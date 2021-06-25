@@ -46,9 +46,9 @@ const getIngredientById = async (event) => {
       TableName: process.env.INGREDIENT_TABLE,
       Key: marshall({ id: event.pathParameters.id }),
     };
-    const { Obj } = await db.send(new GetItemCommand(params));
+    const { Item } = await db.send(new GetItemCommand(params));
 
-    const result = Obj ? unmarshall(Obj) : {};
+    const result = Item ? unmarshall(Item) : {};
     result.message = "Successfully retrieved ingredient.";
     response.body = JSON.stringify(result);
   } catch (e) {
@@ -67,7 +67,7 @@ const createIngredient = async (event) => {
     const body = ingredientInfo(JSON.parse(event.body));
     const params = {
       TableName: process.env.INGREDIENT_TABLE,
-      Obj: marshall(body || {}),
+      Item: marshall(body || {}),
     };
     const createResult = await db.send(new PutItemCommand(params));
 
@@ -146,14 +146,14 @@ const findIngredients = async () => {
   const response = { statusCode: 200 };
 
   try {
-    const { List } = await db.send(
+    const { Items } = await db.send(
       new ScanCommand({ TableName: process.env.INGREDIENT_TABLE })
     );
 
     response.body = JSON.stringify({
       message: "Successfully retrieved all ingredient.",
-      items: List.map((Obj) => unmarshall(Obj)),
-      total: List.length,
+      items: Items.map((item) => unmarshall(item)),
+      total: Items.length,
     });
   } catch (e) {
     console.error(e);

@@ -18,12 +18,14 @@ exports.handler = async (event) => {
 
     const { Item } = await db.send(new GetItemCommand(params));
     console.log(Item);
-    const img = Item.img;
+    const img = String(Item.img);
 
     if (img) {
       if (!isImageDeleted(img)) {
         console.log("!isImageDeleted");
         throw new Error("Img not delete");
+      } else {
+        console.log("isImageDeleted");
       }
     }
 

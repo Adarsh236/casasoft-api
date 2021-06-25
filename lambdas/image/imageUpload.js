@@ -47,8 +47,10 @@ const isImageDeleted = async (event) => {
   try {
     console.log(event);
     let split = event.split("amazonaws.com/", 2);
+    console.log("split");
     console.log(split);
     const key = split[1];
+    console.log("key");
     console.log(key);
     const deleteObject = s3.deleteObject(
       {

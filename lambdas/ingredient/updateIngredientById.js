@@ -80,7 +80,6 @@ exports.handler = async (event) => {
 
 const ingredientInfo = (ingredient) => {
   return {
-    id: ingredient.id,
     title: ingredient.title,
     img: ingredient.img,
     fat: ingredient.fat,

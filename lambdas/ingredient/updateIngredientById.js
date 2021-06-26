@@ -10,8 +10,6 @@ exports.handler = async (event) => {
     const tableName = process.env.INGREDIENT_TABLE;
     const updatedResult = await Dynamo.update(id, body, tableName);
 
-    console.log("updatedResult");
-    console.log(updatedResult);
     response.body = getMsg(updatedResult, "updated", true);
   } catch (e) {
     console.error(e);

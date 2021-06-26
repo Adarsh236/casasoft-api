@@ -56,8 +56,6 @@ const Dynamo = {
 
   update: async (id, data, tableName) => {
     data = await updateImg(id, data, tableName);
-    console.log(".img");
-    console.log(data);
 
     const objKeys = Object.keys(data);
     const params = {
@@ -99,21 +97,14 @@ const updateImg = async (id, data, tableName) => {
 
   const newImg = data.img;
   const prevImg = result.img;
-  console.log("newImg Update1");
-  console.log(newImg);
-  console.log("prevImg Update1");
-  console.log(prevImg);
 
   //Img Update
   if (prevImg !== newImg) {
-    console.log("Img Update1");
     if (prevImg.includes("amazonaws.com/")) {
       const res = await isImageDeleted(prevImg);
       if (!res) throw new Error("Prev Img not delete");
-      console.log("Img Update2");
     }
     if (newImg) {
-      console.log("Img Update3");
       data.img = await getUploadImageUrl(newImg);
     }
   }

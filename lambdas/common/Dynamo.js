@@ -8,11 +8,39 @@ const {
   ScanCommand,
 } = require("@aws-sdk/client-dynamodb");
 
-const { isImageDeleted } = require("../image/imageUpload");
+const { isImageDeleted, getUploadImageUrl } = require("../image/imageUpload");
 
 const db = new DynamoDBClient({});
 
 const Dynamo = {
+  async updateImg(id, data, tableName) {
+    const params = {
+      TableName: tableName,
+      Key: marshall({ id: id }),
+    };
+
+    const { Item } = await db.send(new GetItemCommand(params));
+    const result = Item ? unmarshall(Item) : {};
+
+    const newImg = data.img;
+    const prevImg = result.img;
+
+    //Img Update
+    if (!prevImg.includes(newImg)) {
+      console.log("Img Update1");
+      if (prevImg.includes("amazonaws.com/")) {
+        const res = await isImageDeleted(img);
+        if (!res) throw new Error("Prev Img not delete");
+        console.log("Img Update2");
+      }
+      if (newImg) {
+        console.log("Img Update3");
+        data.img = await getUploadImageUrl(img);
+      }
+    }
+
+    return data;
+  },
   create: async (data, tableName) => {
     const params = {
       TableName: tableName,
@@ -55,6 +83,10 @@ const Dynamo = {
   },
 
   update: async (id, data, tableName) => {
+    data = await updateImg(id, data, tableName);
+    console.log(".img");
+    console.log(data);
+
     const objKeys = Object.keys(data);
     const params = {
       TableName: tableName,

@@ -99,6 +99,10 @@ const updateImg = async (id, data, tableName) => {
 
   const newImg = data.img;
   const prevImg = result.img;
+  console.log("newImg Update1");
+  console.log(newImg);
+  console.log("prevImg Update1");
+  console.log(prevImg);
 
   //Img Update
   if (!prevImg.includes(newImg)) {

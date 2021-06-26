@@ -105,16 +105,16 @@ const updateImg = async (id, data, tableName) => {
   console.log(prevImg);
 
   //Img Update
-  if (!prevImg.includes(newImg)) {
+  if (prevImg !== newImg) {
     console.log("Img Update1");
     if (prevImg.includes("amazonaws.com/")) {
-      const res = await isImageDeleted(img);
+      const res = await isImageDeleted(prevImg);
       if (!res) throw new Error("Prev Img not delete");
       console.log("Img Update2");
     }
     if (newImg) {
       console.log("Img Update3");
-      data.img = await getUploadImageUrl(img);
+      data.img = await getUploadImageUrl(newImg);
     }
   }
 

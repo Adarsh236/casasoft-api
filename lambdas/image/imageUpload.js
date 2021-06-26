@@ -25,7 +25,7 @@ const getUploadImageUrl = async (event) => {
 
     const name = uuid.v4();
     const key = `${name}.${detectedExt}`;
-    const result = await s3
+    await s3
       .putObject({
         Body: buffer,
         Key: key,
